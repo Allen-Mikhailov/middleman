@@ -1,4 +1,4 @@
-const https = require('https');
+const https = require('http');
 
 const channels = {
     Death: "/api/webhooks/954896573861597245/ZPqd5xwcx_AFo9OcsYDxqHHqHjafT75IyluMqzJqbaL5dydS6ItGB_goEq5wlDdobZjw",
@@ -10,11 +10,14 @@ const requestListener = function (req, res) {
     const botname = "SERVER"
 
     if (url.startsWith("/dis")) {
-        // nil, "dis", channel, 
-        const args = url.split("/")
-        const channel = args[3]
+        // nil, "dis", channel, header, subheader, footer
+        const args = url.split("/");
+        const channel = args[3];
+        const header = args[4];
+        const subheader = args[5];
+        const footer = args[6];
 
-        const data = {
+        const data = JSON.stringify({
             username: botname,
             embeds: [
                 {
@@ -30,7 +33,7 @@ const requestListener = function (req, res) {
                     }
                 }
             ]
-        }
+        })
 
         const options = {
             hostname: 'discord.com',
@@ -43,12 +46,17 @@ const requestListener = function (req, res) {
             }
         }
 
+        const reqe = https.request(options);
+        reqe.write(data);
+        // console.log(data)
+        reqe.end();
+
+        res.writeHead(200);
+        res.end("Success");
+    } else {
+        res.writeHead(200);
+        res.end("Hello world");
     }
-
-    res.writeHead(200);
-    res.end("Success");
-
-    https.request()
 }
 
 const server = https.createServer(requestListener);
