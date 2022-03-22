@@ -6,29 +6,32 @@ const channels = {
 	Grip: "https://discord.com/api/webhooks/954907659750998086/O7OWdtC-8cIg7Wnr6_CC6zNVt879fBBP9GxJ3sJI-wkovJII54NPoaRokdwzebPoD5xa"
 }
 
-const requestListener = function (req, res) {
+const requestListener = function(req, res) {
     const url = req.url
     const botname = "SERVER"
 
-    console.log(url)
-
     if (url.startsWith("/dis")) {
+
         console.log("Request")
-        // nil, "dis", channel, header, subheader, footer
-        const args = url.split("/");
-        const channel = args[3];
-        const content = args[4];
 
-        const data = {["content"]: content}
+        const chunks = [];
+        req.on('data', chunk => chunks.push(chunk));
+        req.on('end', () => {
+            const reqdata = Buffer.concat(chunks).toJSON();
 
-        request({
-            url: channels[channel],
-            method: "POST",
-            json: true,   // <--Very important!!!
-            body: data
-        }, function (error, response, body){
-            console.log("Message Sent");
-        });
+            console.log(reqdata)
+
+            const data = {username: botname, ["content"]: reqdata.content}
+
+            request({
+                url: channels[reqdata.channel],
+                method: "POST",
+                json: true,   // <--Very important!!!
+                body: data
+            }, function (error, response, body){
+                console.log("Message Sent");
+            });
+        })
 
         res.writeHead(200);
         res.end("Success");
