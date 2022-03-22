@@ -12,14 +12,10 @@ const requestListener = function(req, res) {
 
     if (url.startsWith("/dis")) {
 
-        console.log("Request")
-
         const chunks = [];
         req.on('data', chunk => chunks.push(chunk));
         req.on('end', () => {
             const reqdata = JSON.parse(Buffer.concat(chunks).toString());
-
-            console.log(reqdata)
 
             const data = {username: botname, ["content"]: reqdata.content}
 
@@ -37,7 +33,7 @@ const requestListener = function(req, res) {
         res.end("Success");
     } else {
         res.writeHead(200);
-        res.end("Hello world");
+        res.end("You have reached the server");
     }
 }
 
