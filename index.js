@@ -17,7 +17,7 @@ const requestListener = function(req, res) {
         const chunks = [];
         req.on('data', chunk => chunks.push(chunk));
         req.on('end', () => {
-            const reqdata = Buffer.concat(chunks).toJSON();
+            const reqdata = JSON.parse(Buffer.concat(chunks).toString());
 
             console.log(reqdata)
 
