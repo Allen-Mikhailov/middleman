@@ -19,8 +19,6 @@ const requestListener = function(req, res) {
         req.on('end', () => {
             const reqdata = JSON.parse(Buffer.concat(chunks).toString());
 
-            console.log(reqdata)
-
             const data = {username: botname, ["content"]: reqdata.content}
 
             request({
