@@ -1,6 +1,8 @@
 const http = require('http');
 var request = require('request');
 
+const port = 8080
+
 const channels = {
 	Death: "https://discord.com/api/webhooks/954896573861597245/ZPqd5xwcx_AFo9OcsYDxqHHqHjafT75IyluMqzJqbaL5dydS6ItGB_goEq5wlDdobZjw",
 	Grip: "https://discord.com/api/webhooks/954907659750998086/O7OWdtC-8cIg7Wnr6_CC6zNVt879fBBP9GxJ3sJI-wkovJII54NPoaRokdwzebPoD5xa"
@@ -11,8 +13,6 @@ const requestListener = function(req, res) {
     const botname = "SERVER"
 
     if (url.startsWith("/dis")) {
-
-        console.log("Request")
 
         const chunks = [];
         req.on('data', chunk => chunks.push(chunk));
@@ -33,13 +33,15 @@ const requestListener = function(req, res) {
             });
         })
 
+        console.log("Successfully handled request!")
         res.writeHead(200);
         res.end("Success");
     } else {
         res.writeHead(200);
-        res.end("Hello world");
+        res.end("The Server Is online!");
     }
 }
 
 const server = http.createServer(requestListener);
-server.listen(8080);
+server.listen(port);
+console.log("Server listening at port "+port)
